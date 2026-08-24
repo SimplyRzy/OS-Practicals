@@ -1,0 +1,161 @@
+Experiment No.03 
+Name of Experiment: Write a program to implement FCFS, SJF and priority based Algorithm.
+Problem Statement: Implement a C program for FCFS SJF and Priority based Algorihtm
+Software /Hardware Requirements: Turbo C++ Compiler Personal Computer 
+Theory:
+SJF Algorithm
+Shortest Job First (SJF) is a non-preemptive scheduling algorithm that selects the process with the
+shortest burst time (execution time) to execute next. It is also known as Shortest Job Next (SJN).
+Working Principle:
+ At any scheduling point, the CPU is assigned to the process with the smallest burst time.
+ If two processes have the same burst time, FCFS (First Come First Serve) is used as a tie-breaker.
+ Once a process starts execution, it runs to completion (non-preemptive).
+Steps:
+1. Sort all processes by burst time.
+2. Execute the process with the shortest burst time.
+3. Calculate:
+o Waiting Time (WT) = Start Time – Arrival Time
+o Turnaround Time (TAT) = Completion Time – Arrival Time
+FCFS Algorithm
+First-Come, First-Served (FCFS) is the simplest CPU scheduling algorithm, where the process that 
+arrives first gets executed first. It follows the FIFO (First In, First Out) principle, like a queue. 
+ Waiting Time (WT) = Start Time − Arrival Time
+ Turnaround Time (TAT) = Completion Time − Arrival Time
+ TAT = WT + Burst Time
+Working Principle:
+1. Processes are added to the ready queue in the order they arrive.
+2. CPU picks the first process in the queue and runs it until completion.
+3. No preemption – once a process starts, it runs till it finishes.
+ Priority Based Algorithm
+Priority Scheduling is a CPU scheduling algorithm where each process is assigned a priority, and the
+CPU is allocated to the process with the highest priority.
+ Lower numerical value = Higher priority (by default). G H RAISONI UNIVERSITY, AMRAVATI
+Anjangaon Bari Road, Amravati - 444701
+ Can be preemptive or non-preemptive
+Working Principle:
+1. Each process has a priority number.
+2. The CPU is assigned to the process with the highest priority.
+3. If two processes have the same priority, FCFS is used.
+4. In pre-emptive mode, a process with higher priority can interrupt a running process.
+Program Code:
+/* Write a program in C to Implement FCFS, SJF and Priority Scheduling Algorithm */
+#include <stdio.h>
+struct Process {
+ int pid;
+ int burst;
+ int priority;
+ int waiting;
+ int turnaround;
+};
+// Function to display results
+void display(struct Process p[], int n, const char* algo_name) {
+ float total_wait = 0, total_turnaround = 0;
+ printf("\n--- %s Scheduling ---\n", algo_name);
+ printf("PID\tBurst\tPriority\tWaiting\tTurnaround\n");
+ for (int i = 0; i < n; i++) {
+ printf("%d\t%d\t%d\t\t%d\t%d\n",
+ p[i].pid, p[i].burst, p[i].priority,
+ p[i].waiting, p[i].turnaround);
+ total_wait += p[i].waiting;
+ total_turnaround += p[i].turnaround;
+ }
+ printf("Average Waiting Time: %.2f\n", total_wait / n);
+ printf("Average Turnaround Time: %.2f\n", total_turnaround / n);
+}
+// FCFS Scheduling
+void fcfs(struct Process p[], int n) {
+ p[0].waiting = 0;
+ for (int i = 1; i < n; i++) {
+ p[i].waiting = p[i - 1].waiting + p[i - 1].burst;
+ }
+ for (int i = 0; i < n; i++) { G H RAISONI UNIVERSITY, AMRAVATI
+Anjangaon Bari Road, Amravati - 444701
+ p[i].turnaround = p[i].waiting + p[i].burst;
+ }
+}
+// SJF Scheduling (Non-preemptive)
+void sjf(struct Process p[], int n) {
+ struct Process temp;
+ // Sort based on burst time
+ for (int i = 0; i < n-1; i++)
+ for (int j = i+1; j < n; j++)
+ if (p[j].burst < p[i].burst) {
+ temp = p[i]; p[i] = p[j]; p[j] = temp;
+ }
+ p[0].waiting = 0;
+ for (int i = 1; i < n; i++)
+ p[i].waiting = p[i - 1].waiting + p[i - 1].burst;
+ for (int i = 0; i < n; i++)
+ p[i].turnaround = p[i].waiting + p[i].burst;
+}
+// Priority Scheduling (Non-preemptive, lower value = higher 
+priority)
+void priority(struct Process p[], int n) {
+ struct Process temp;
+ // Sort based on priority
+ for (int i = 0; i < n-1; i++)
+ for (int j = i+1; j < n; j++)
+ if (p[j].priority < p[i].priority) {
+ temp = p[i]; p[i] = p[j]; p[j] = temp;
+ }
+ p[0].waiting = 0;
+ for (int i = 1; i < n; i++)
+ p[i].waiting = p[i - 1].waiting + p[i - 1].burst;
+ for (int i = 0; i < n; i++)
+ p[i].turnaround = p[i].waiting + p[i].burst;
+}
+int main() {
+ int n;
+ struct Process p[10], fcfs_arr[10], sjf_arr[10], prio_arr[10];
+ printf("Enter number of processes: ");
+ scanf("%d", &n);
+ for (int i = 0; i < n; i++) { G H RAISONI UNIVERSITY, AMRAVATI
+Anjangaon Bari Road, Amravati - 444701
+ p[i].pid = i + 1;
+ printf("Enter Burst Time and Priority for Process %d: ", 
+p[i].pid);
+ scanf("%d%d", &p[i].burst, &p[i].priority);
+ }
+ // Copy data to preserve original for each algorithm
+ for (int i = 0; i < n; i++) {
+ fcfs_arr[i] = p[i];
+ sjf_arr[i] = p[i];
+ prio_arr[i] = p[i];
+ }
+ fcfs(fcfs_arr, n);
+ display(fcfs_arr, n, "FCFS");
+ sjf(sjf_arr, n);
+ display(sjf_arr, n, "SJF");
+ priority(prio_arr, n);
+ display(prio_arr, n, "Priority");
+ return 0;
+}
+Output:
+Enter number of processes: 3
+Enter Burst Time and Priority for Process 1: 6 3
+Enter Burst Time and Priority for Process 2: 8 1
+Enter Burst Time and Priority for Process 3: 7 2
+--- FCFS Scheduling ---
+PID Burst Priority Waiting Turnaround
+1 6 3 0 6
+2 8 1 6 14
+3 7 2 14 21
+Average Waiting Time: 6.67
+Average Turnaround Time: 13.67
+--- SJF Scheduling ---
+PID Burst Priority Waiting Turnaround
+1 6 3 0 6
+3 7 2 6 13
+2 8 1 13 21
+Average Waiting Time: 6.33
+Average Turnaround Time: 13.33
+--- Priority Scheduling G H RAISONI UNIVERSITY, AMRAVATI
+Anjangaon Bari Road, Amravati - 444701
+PID Burst Priority Waiting Turnaround
+2 8 1 0 8
+3 7 2 8 15
+1 6 3 15 21
+Average Waiting Time: 7.67
+Average Turnaround Time: 14.67
+Conclusion:
+ In this way we implement a program to implement FCFS, SJF and priority based Algorithm
