@@ -1,0 +1,222 @@
+Experiment No.: 01
+
+Name of Experiment:
+Perform a case study by installing and exploring various types of operating systems on a physical or logical (virtual) machine. (Linux Installation).
+
+Problem Statement:
+Installation of Fedora 42 Workstation on physical Machine.
+
+Software / Hardware Requirements:
+
+Fedora 42 Workstation ISO Image
+
+Bootable Pen Drive
+
+PC
+
+Theory
+1. Introduction to Linux
+Linux is a powerful, open-source, UNIX-like operating system originally developed by Linus Torvalds in 1991. It has grown into one of the most widely used OS kernels and forms the basis for distributions such as Ubuntu, Fedora, Debian, Arch, and Red Hat.
+
+Linux is widely used in:
+
+Servers
+
+Desktops
+
+Embedded Systems
+
+Mobile Devices
+
+Supercomputers
+
+IoT Devices
+
+2. Key Features of Linux
+Open Source: Source code is freely available and modifiable.
+
+Multiuser System: Multiple users can use system resources simultaneously.
+
+Multitasking: Can run multiple processes concurrently.
+
+Portability: Can run on a wide range of hardware platforms.
+
+Security: Provides user permissions, firewalls, SELinux, etc.
+
+Stability: Rarely needs to be rebooted and is ideal for servers.
+
+Modularity: Components such as kernel, shell and filesystem are independent.
+
+Shell Interface: Command-line interface used to control the system.
+
+3. Components of Linux Operating System
+A. Kernel
+
+Core component managing hardware and system resources.
+
+Types include Monolithic, Microkernel and Hybrid.
+
+Responsibilities include process scheduling, memory management and device drivers.
+
+B. Shell
+
+Interface between user and kernel.
+
+Examples: Bash, Zsh and Fish.
+
+Interprets commands entered by users.
+
+C. File System
+
+Everything in Linux is treated as a file.
+
+Standard hierarchy starts from / (root).
+
+Common directories include /home, /etc, /bin, /var and /dev.
+
+D. System Utilities
+
+Essential tools and programs for managing the system.
+
+Examples: ls, cd, cp, ps, top, kill.
+
+E. Application Programs
+
+Graphical and text-based software such as browsers, editors and IDEs.
+
+4. Linux Distributions
+A Linux distribution is a complete operating system built around the Linux kernel with additional tools and package managers.
+
+Ubuntu: User-friendly and suitable for beginners.
+
+Fedora: Cutting-edge features and Red Hat-backed.
+
+Debian: Very stable and community-driven.
+
+Arch: Lightweight, rolling release and suitable for advanced users.
+
+CentOS/AlmaLinux: Server-based and enterprise-ready.
+
+5. Linux File System Hierarchy
+/
+├── bin/   → Essential binaries
+├── boot/  → Bootloader files
+├── etc/   → Configuration files
+├── home/  → User home directories
+├── root/  → Root user's home
+├── usr/   → User programs and data
+└── var/   → Variable data like logs and mail
+6. Common Linux Commands
+Command	Purpose
+ls	List files/directories
+cd	Change directory
+pwd	Print current directory
+cp, mv	Copy or move files
+rm	Remove files
+chmod	Change file permissions
+top, htop	Show running processes
+sudo	Run command with super-user privileges
+dnf, apt	Install and manage packages
+7. Package Management
+Linux uses package managers to install, update and remove software.
+
+APT: Debian-based systems such as Ubuntu.
+
+DNF/YUM: Red Hat-based systems such as Fedora and CentOS.
+
+Pacman: Arch Linux.
+
+Flatpak/Snap: Universal package formats.
+
+8. Applications of Linux
+Servers
+
+Software Development
+
+Networking
+
+Cybersecurity
+
+Education and Research
+
+Cloud Platforms
+
+9. Advantages of Linux
+Free and open-source
+
+Highly customizable
+
+Secure and stable
+
+Great community support
+
+Large software repositories
+
+Fedora 42 Workstation Installation Process
+Boot into Fedora 42 using the Live ISO.
+
+Start the installer and select the language and keyboard layout.
+
+Select the available partition.
+
+Open the three-dot menu and select Launch Storage Editor.
+
+Create free space on the disk by shrinking the existing partition.
+
+Linux requires approximately 40 GB of free space.
+
+Install the setup and finish the installation.
+
+Dual-Boot Fedora and Windows
+Preparation:
+
+Back up important Windows data.
+
+Use Windows Disk Management to shrink the existing Windows partition.
+
+Create at least 40 GB of unallocated space.
+
+Download the Fedora Workstation 42 ISO.
+
+Create a bootable USB using Rufus or Fedora Media Writer.
+
+Set the partition scheme to GPT.
+
+Installation:
+
+Boot the computer from the Fedora USB.
+
+Start the installation.
+
+Select language and keyboard layout.
+
+Select the unallocated space as the installation destination.
+
+Choose automatic or custom partitioning.
+
+For custom partitioning, create /boot/efi, /boot and / partitions.
+
+Optionally create a /home partition.
+
+Enable encryption if required.
+
+Review settings and click Begin Installation.
+
+Complete the final setup.
+
+Dual-Boot Configuration:
+
+Fedora configures the GRUB bootloader to choose between Windows and Fedora.
+
+BIOS/UEFI boot order may need to be adjusted.
+
+Important Considerations:
+
+Secure Boot may cause installation or booting issues.
+
+Carefully review partitioning to avoid deleting Windows.
+
+Consult Fedora documentation or the Fedora community for troubleshooting.
+
+Conclusion:
+In this way, we successfully install Fedora 42 Workstation on a personal computer.
