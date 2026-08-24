@@ -1,0 +1,503 @@
+Experiment No.02 
+Name of Experiment: Implement of different types of system calls.
+Problem Statement: Implement the fork ( ) and Write ( ) system call in Linux operating System
+Software /Hardware Requirements: GCC Compiler Linux Operating System
+Theory:
+A system call is a programmatic way in which a computer program requests a service from the
+kernel of the operating system on which it is executed. A system call is a way for programs
+to interact with the operating system. A computer program makes a system call when it
+requests the operating system's kernel. System call provides the services of the operating system
+to the user programs via the Application Program Interface (API). System calls are the only entry
+points into the kernel system and are executed in kernel mode.
+ A user program can interact with the operating system using a system call. A number of
+services are requested by the program, and the OS responds by launching a number of systems calls
+to fulfill the request.
+ A system call can be written in high-level languages like C or Pascal or in assembly language.
+If a high-level language is used, the operating system may directly invoke system calls, which are
+predefined functions.
+ A system call is initiated by the program executing a specific instruction, which triggers a
+switch to kernel mode, allowing the program to request a service from the OS. The OS then
+handles the request, performs the necessary operations, and returns the result back to the program.
+ System calls are essential for the proper functioning of an operating system, as they provide a
+standardized way for programs to access system resources. Without system calls, each program
+would need to implement its methods for accessing hardware and system services, leading to
+inconsistent and error-prone behavior.
+Services Provided by System Calls
+ Process Creation and Management
+ Main Memory Management
+ File Access, Directory, and File System Management
+ Device Handling(I/O)
+ Protection
+ Networking, etc.
+o Process Control: end, abort, create, terminate, allocate, and free memory.
+o File Management: create, open, close, delete, read files, etc. G H RAISONI UNIVERSITY, AMRAVATI
+Anjangaon Bari Road, Amravati - 444701
+o Device Management
+o Information Maintenance
+o Communication
+Features of System Calls
+ Interface: System calls provide a well-defined interface between user programs and the
+operating system. Programs make requests by calling specific functions, and the operating system
+responds by executing the requested service and returning a result.
+ Protection: System calls are used to access privileged operations that are not available to
+normal user programs. The operating system uses this privilege to protect the system from
+malicious or unauthorized access.
+ Kernel Mode: When a system call is made, the program is temporarily switched from user
+mode to kernel mode. In kernel mode, the program has access to all system resources, including
+hardware, memory, and other processes.
+ Context Switching: A system call requires a context switch, which involves saving the state
+of the current process and switching to the kernel mode to execute the requested service. This can
+introduce overhead, which can impact system performance.
+ Error Handling: System calls can return error codes to indicate problems with the requested
+service. Programs must check for these errors and handle them appropriately.
+ Synchronization: System calls can be used to synchronize access to shared resources, such as
+files or network connections. The operating system provides synchronization mechanisms, such as
+locks or semaphores, to ensure that multiple programs can access these resources safely.
+How does System Call Work?
+Here is a detailed explanation step by step how system calls work:
+ Users need special resources: Sometimes programs need to do some special things that can't
+be done without the permission of the OS like reading from a file, writing to a file, getting any
+information from the hardware, or requesting a space in memory.
+ The program makes a system call request: There are special predefined instructions to make
+a request to the operating system. These instructions are nothing but just a "system call". The
+program uses these system calls in its code when needed.
+ Operating system sees the system call: When the OS sees the system call then it recognizes
+that the program needs help at this time so it temporarily stops the program execution and gives all
+the control to a special part of itself called 'Kernel'. Now 'Kernel' solves the need of the program.
+ The operating system performs the operations: Now the operating system performs the
+operation that is requested by the program. Example: reading content from a file etc.
+ Operating system give control back to the program : After performing the special
+operation, OS give control back to the program for further execution of program.
+Examples of a System Call in Windows and Unix
+System calls for Windows and Unix come in many different forms. These are listed in the table
+below as follows: G H RAISONI UNIVERSITY, AMRAVATI
+Anjangaon Bari Road, Amravati - 444701
+Process Windows Unix
+Process Control
+CreateProcess()
+ExitProcess()
+WaitForSingleObject()
+Fork()
+Exit()
+Wait()
+File manipulation
+CreateFile()
+ReadFile()
+WriteFile()
+Open()
+Read()
+Write()
+Close()
+Device Management
+SetConsoleMode()
+ReadConsole()
+WriteConsole()
+Ioctl()
+Read()
+Write()
+Information Maintenance
+GetCurrentProcessID()
+SetTimer()
+Sleep()
+Getpid()
+Alarm()
+Sleep()
+Communication
+CreatePipe()
+CreateFileMapping()
+MapViewOfFile()
+Pipe()
+Shmget()
+Mmap()
+Protection
+SetFileSecurity()
+InitializeSecurityDescriptor()
+SetSecurityDescriptorgroup()
+Chmod()
+Umask()
+Chown()
+Program Code:
+/* C Program to Implement fork() System Call */
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+int main() {
+ pid_t pid;
+ // Create a new process
+ pid = fork();
+ // Check for error
+ if (pid < 0) {
+ perror("Fork failed");
+ return 1; G H RAISONI UNIVERSITY, AMRAVATI
+Anjangaon Bari Road, Amravati - 444701
+ }
+ // Child process block
+ if (pid == 0) {
+ printf("Child Process:\n");
+ printf("Child PID: %d\n", getpid());
+ printf("Parent PID (from child): %d\n", getppid());
+ }
+ // Parent process block
+ else {
+ printf("Parent Process:\n");
+ printf("Parent PID: %d\n", getpid());
+ printf("Child PID (from parent): %d\n", pid);
+ }
+ return 0;
+}
+Output:
+Compilation and Execution (Linux terminal)
+1. Save the file as fork_example.c
+2. Compile the program using GCC:
+gcc fork_example.c -o fork_example
+3. Run the executable:
+./fork_example
+Parent Process:
+Parent PID: 12345
+Child PID (from parent): 12346
+Child Process:
+Child PID: 12346
+Parent PID (from child): 12345
+/* C Program to Implement write() System Call */
+#include <unistd.h> // for write()
+#include <fcntl.h> // for open() and O_* constants
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdio.h> // for perror()
+int main() {
+ int fd;
+ const char *text = "Hello from write() system call in C!\n";
+ // Open a file (or create it if it doesn't exist)
+ fd = open("output.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644); G H RAISONI UNIVERSITY, AMRAVATI
+Anjangaon Bari Road, Amravati - 444701
+ 
+ if (fd < 0) {
+ perror("File open failed");
+ return 1;
+ }
+ // Write to the file
+ ssize_t bytes_written = write(fd, text, 37); // write 37 bytes
+ if (bytes_written < 0) {
+ perror("Write failed");
+ close(fd);
+ return 1;
+ }
+printf("Successfully written %ld bytes to output.txt\n", bytes_written);
+ // Close the file
+ close(fd);
+ return 0;
+}
+ Save the code as write_example.c
+ Compile with gcc:
+gcc write_example.c -o write_example
+ Run the program:
+./write_example
+ Check the contents of output.txt:
+ cat output.txt
+Conclusion: In this way we implement fork() and Write() system call in operating systemExamples: Bash, Zsh and Fish.
+
+Interprets commands entered by users.
+
+C. File System
+
+Everything in Linux is treated as a file.
+
+Standard hierarchy starts from / (root).
+
+Common directories include /home, /etc, /bin, /var and /dev.
+
+D. System Utilities
+
+Essential tools and programs for managing the system.
+
+Examples: ls, cd, cp, ps, top, kill.
+
+E. Application Programs
+
+Graphical and text-based software such as browsers, editors and IDEs.
+
+4. Linux Distributions
+A Linux distribution is a complete operating system built around the Linux kernel with additional tools and package managers.
+
+Ubuntu: User-friendly and suitable for beginners.
+
+Fedora: Cutting-edge features and Red Hat-backed.
+
+Debian: Very stable and community-driven.
+
+Arch: Lightweight, rolling release and suitable for advanced users.
+
+CentOS/AlmaLinux: Server-based and enterprise-ready.
+
+5. Linux File System Hierarchy
+/
+├── bin/   → Essential binaries
+├── boot/  → Bootloader files
+├── etc/   → Configuration files
+├── home/  → User home directories
+├── root/  → Root user's home
+├── usr/   → User programs and data
+└── var/   → Variable data like logs and mail
+6. Common Linux Commands
+Command	Purpose
+ls	List files/directories
+cd	Change directory
+pwd	Print current directory
+cp, mv	Copy or move files
+rm	Remove files
+chmod	Change file permissions
+top, htop	Show running processes
+sudo	Run command with super-user privileges
+dnf, apt	Install and manage packages
+7. Package Management
+Linux uses package managers to install, update and remove software.
+
+APT: Debian-based systems such as Ubuntu.
+
+DNF/YUM: Red Hat-based systems such as Fedora and CentOS.
+
+Pacman: Arch Linux.
+
+Flatpak/Snap: Universal package formats.
+
+8. Applications of Linux
+Servers
+
+Software Development
+
+Networking
+
+Cybersecurity
+
+Education and Research
+
+Cloud Platforms
+
+9. Advantages of Linux
+Free and open-source
+
+Highly customizable
+
+Secure and stable
+
+Great community support
+
+Large software repositories
+
+Fedora 42 Workstation Installation Process
+Boot into Fedora 42 using the Live ISO.
+
+Start the installer and select the language and keyboard layout.
+
+Select the available partition.
+
+Open the three-dot menu and select Launch Storage Editor.
+
+Create free space on the disk by shrinking the existing partition.
+
+Linux requires approximately 40 GB of free space.
+
+Install the setup and finish the installation.
+
+Dual-Boot Fedora and Windows
+Preparation:
+
+Back up important Windows data.
+
+Use Windows Disk Management to shrink the existing Windows partition.
+
+Create at least 40 GB of unallocated space.
+
+Download the Fedora Workstation 42 ISO.
+
+Create a bootable USB using Rufus or Fedora Media Writer.
+
+Set the partition scheme to GPT.
+
+Installation:
+
+Boot the computer from the Fedora USB.
+
+Start the installation.
+
+Select language and keyboard layout.
+
+Select the unallocated space as the installation destination.
+
+Choose automatic or custom partitioning.
+
+For custom partitioning, create /boot/efi, /boot and / partitions.
+
+Optionally create a /home partition.
+
+Enable encryption if required.
+
+Review settings and click Begin Installation.
+
+Complete the final setup.
+
+Dual-Boot Configuration:
+
+Fedora configures the GRUB bootloader to choose between Windows and Fedora.
+
+BIOS/UEFI boot order may need to be adjusted.
+
+Important Considerations:
+
+Secure Boot may cause installation or booting issues.
+
+Carefully review partitioning to avoid deleting Windows.
+
+Consult Fedora documentation or the Fedora community for troubleshooting.
+
+Conclusion:
+In this way, we successfully install Fedora 42 Workstation on a personal computer. 
+
+
+Practical 2 — System Calls
+Experiment No.: 02
+
+Name of Experiment:
+Implement different types of system calls.
+
+Problem Statement:
+Implement the fork() and write() system calls in Linux Operating System.
+
+Software / Hardware Requirements:
+
+GCC Compiler
+
+Linux Operating System
+
+Theory
+A system call is a programmatic way in which a computer program requests a service from the kernel of the operating system. System calls allow programs to interact with the operating system.
+
+System calls provide OS services to user programs through the Application Program Interface (API). They act as entry points into the kernel and are executed in kernel mode.
+
+Services Provided by System Calls
+Process Creation and Management
+
+Main Memory Management
+
+File and Directory Management
+
+Device Handling (I/O)
+
+Protection
+
+Networking
+
+Communication
+
+Information Maintenance
+
+Features of System Calls
+Interface: Provides an interface between user programs and the operating system.
+
+Protection: Allows privileged operations while protecting the system.
+
+Kernel Mode: Temporarily switches the program from user mode to kernel mode.
+
+Context Switching: Saves the current process state and switches to kernel mode.
+
+Error Handling: Returns error codes when an operation fails.
+
+Synchronization: Helps safely access shared resources.
+
+How a System Call Works
+A program requires a special OS resource.
+
+The program makes a system call request.
+
+The operating system identifies the request.
+
+Control is transferred to the kernel.
+
+The kernel performs the requested operation.
+
+Control is returned to the program.
+
+Program 1: fork() System Call
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+int main() {
+    pid_t pid;
+
+    pid = fork();
+
+    if (pid < 0) {
+        perror("Fork failed");
+        return 1;
+    }
+
+    if (pid == 0) {
+        printf("Child Process:\n");
+        printf("Child PID: %d\n", getpid());
+        printf("Parent PID (from child): %d\n", getppid());
+    }
+    else {
+        printf("Parent Process:\n");
+        printf("Parent PID: %d\n", getpid());
+        printf("Child PID (from parent): %d\n", pid);
+    }
+
+    return 0;
+}
+Compilation and Execution
+Save as fork_example.c.
+
+Compile:
+
+gcc fork_example.c -o fork_example
+Run:
+
+./fork_example
+Sample Output:
+
+Parent Process:
+Parent PID: 12345
+Child PID (from parent): 12346
+
+Child Process:
+Child PID: 12346
+Parent PID (from child): 12345
+Program 2: write() System Call
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdio.h>
+
+int main() {
+    int fd;
+    const char *text = "Hello from write() system call in C!\n";
+
+    fd = open("output.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+
+    if (fd < 0) {
+        perror("File open failed");
+        return 1;
+    }
+
+    ssize_t bytes_written = write(fd, text, 37);
+
+    if (bytes_written < 0) {
+        perror("Write failed");
+        close(fd);
+        return 1;
+    }
+
+    printf("Successfully written %ld bytes to output.txt\n",
+           bytes_written);
+
+    close(fd);
+    return 0;
+}
+Compilation and Execution
+gcc write_example.c -o write_example
+./write_example
+cat output.txt
+Conclusion:
+In this way, we implement fork() and write() system calls in the operating system.
